@@ -5,7 +5,6 @@ resource "aws_subnet" "public" {
   availability_zone       = "${element(var.azs, count.index)}"
   map_public_ip_on_launch = "${var.map_public_ip_on_launch}"
   tags                    = "${merge(var.tags, map("Name", format("%s.subnet-public.%s", var.vpc_name, element(var.azs, count.index))))}"
-
 }
 
 resource "aws_internet_gateway" "igw" {
