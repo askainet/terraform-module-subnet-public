@@ -8,19 +8,19 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_internet_gateway" "igw" {
-  count  = "${signum(var.subnets)}"
+  count  = "${signum(length(var.subnets))}"
   vpc_id = "${var.vpc_id}"
   tags   = "${merge(var.tags, map("Name", format("%s.igw", var.vpc_name)))}"
 }
 
 resource "aws_route_table" "public" {
-  count  = "${signum(var.subnets)}"
+  count  = "${signum(length(var.subnets))}"
   vpc_id = "${var.vpc_id}"
   tags   = "${merge(var.tags, map("Name", format("%s.rt-public", var.vpc_name)))}"
 }
 
 resource "aws_route" "public_internet_gateway" {
-  count                  = "${signum(var.subnets)}"
+  count                  = "${signum(length(var.subnets))}"
   route_table_id         = "${aws_route_table.public.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.igw.id}"
